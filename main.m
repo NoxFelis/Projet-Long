@@ -11,28 +11,35 @@ source_path = "../SERNIN/FACE/";
 path_boule_mask_full = "Boule_mask_rot2.png";
 path_boule_mask = "Boule2.png";
 
-mask_3 = repmat(imread(path_boule_mask_full),[1 1 3]);
-mask = repmat(imread(path_boule_mask),[1 1 3]);
+mask = imread(path_boule_mask);
+mask_3 = repmat(mask,[1 1 3]);
 % position of mask:
-%rect = [6013 4682 442 442]; % x y
-%center = [6235 4904]; %x y
-
 rect = [6024 4695 424 424];
-center = [6237 4908];
+centre = [6236.5 4907.5];
+rayon = 425/2;
 
 % parcourir toutes les images
-A = readlines(source_path + "list.txt");
+A = readlines("list.txt");
 
-
-for i=1:size(A,1)
+spheres = [];
+for i=1:size(A,1)-1
 % trouver où se situe la/les boules
     image = imread(source_path+A(i));
     boule = imcrop(image,rect);
-    boule(~mask) = 0;
-    imshow(boule)
+    boule(~mask_3) = 0;
+    spheres = cat(3,spheres,rgb2gray(boule));
+    %imshow(boule)
 
 % estimer l'éclairage
 % comparer avec estimation déjà obtenue
 % faire la stéréophotométrie
 % voir résultats
 end
+
+s = etalonnage(spheres,~mask,[rayon rayon],rayon);
+
+[theta,phi] = conversion(s);
+plot(theta,phi,'o','Color','r','LineWidth',4,'MarkerSize',10);
+xlabel('$\theta$','Interpreter','Latex','FontSize',20);
+ylabel('$\phi$','Interpreter','Latex','FontSize',20);
+axis([0,pi/2,-pi,pi]);

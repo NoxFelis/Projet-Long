@@ -25,6 +25,17 @@ dame_mask = imread(path_dame_mask);
 rect = [4696 1808 424 424];
 rayon = 425/2;
 
+% zone de reconstruction:
+figure
+ref = imread(source_path + "DSC_0012.JPG");
+ref = rot90(ref);
+imshow(ref);
+zone = getrect;
+zone = round(zone);
+dame_mask = true(zone(4)+1,zone(3)+1);
+%zone = [2000 5000 1000 500];
+%dame_mask = true(501,1001);
+
 %% Parcourir toutes les images
 A = readlines("list.txt");
 
@@ -38,6 +49,7 @@ for i=1:size(A,1)-1
     boule(~boule_mask_3) = 0;
     spheres = cat(3,spheres,rgb2gray(boule));
     image = rgb2gray(image);
+    image = imcrop(image,zone);
     I = [I; image(:)'];
 end
 

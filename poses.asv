@@ -1,0 +1,17 @@
+clear all;
+close all;
+
+% source locations
+source_file = "../SERNIN/sernin_camera.xml";
+source_pics = "../SERNIN/JPEG_BRUT/";
+
+% read through the xml file and create a struct from it
+S = readstruct(source_file);
+
+% extraction of the picture names (but we don't nee
+name_pics = [S.chunk.cameras.camera.labelAttribute];
+name_pics = name_pics(2:end);
+
+transform_pics = [S.chunk.cameras.camera.transform];
+transform_pics = transform_pics(2:end);
+

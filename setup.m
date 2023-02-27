@@ -28,7 +28,7 @@ rayon = 425/2;
 %zone = [2000 5000 1000 500];
 %dame_mask = true(501,1001);
 
-%% Parcourir toutes les images
+%% Estimation de l'eclairage
 name_pics = readlines("list.txt");
 
 spheres = [];
@@ -45,4 +45,13 @@ end
 s = etalonnage(spheres,~boule_mask,[rayon rayon],rayon)';
 [theta,phi] = conversion(s);
 
-save eclairages_sernin_mono s source_path name_pics
+%% Création des masques de mosaiquage
+% ATTENTION: le motif est [vert rouge; bleu vert]
+% ce pour l'image dans le bon sens (vertical)
+% pour une image horizontale [bleu vert; vert rouge]
+image = imread(source_path + "DSC_0012.JPG");
+mask_r = rot90(mask_from_canal(image,"R"));
+mask_b = rot90(mask_from_canal(image,"B"));
+mask_g = rot90(mask_from_canal(image,"G"));
+
+save eclairages_sernin_mono s source_path name_pics mask_r mask_g mask_b

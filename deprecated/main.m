@@ -1,7 +1,7 @@
 close all
 clear all
 load eclairages_sernin_mono.mat
-
+source_path = "../../SERNIN/FACE/";
 taille_ecran = get(0,'ScreenSize');
 L = taille_ecran(3);
 H = taille_ecran(4);

@@ -4,7 +4,6 @@ close all;
 %% Emplacements des données
 source_path = "../SERNIN/FACE/";
 boule_mask_path = "Boule_mask.png";
-dame_mask_path = "Dame_mask.png";
 list_path = "list.txt";
 
 %% Récupération des données

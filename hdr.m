@@ -13,5 +13,4 @@ function [image_out, temps_out] = hdr(images, temps)
 	    temps_out(i, j) = temps(1, ind(i, j));
 	end
     end
-
 end

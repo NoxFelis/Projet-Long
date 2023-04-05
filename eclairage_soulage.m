@@ -34,13 +34,13 @@ for i = 1:size(list_dir, 1)
 	raw = rawread(name);
 	info = rawinfo(name);
 	place = mod(raw_count, 7)+1;
-	Images_mosaic(groupe_count, place, :, :) = raw(2500:2999, 5000:5499);
+	Images_mosaic(groupe_count, place, :, :) = raw(2501:3000, 5001:5500);
 	image_grise = rgb2gray(demosaic(raw, info.CFALayout));
-	Images_gray(groupe_count, place, :, :) = image_grise(2500:2999, 5000:5499);
+	Images_gray(groupe_count, place, :, :) = image_grise(2501:3000, 5001:5500);
 	ExposureTime(groupe_count, place) = info.ExifTags.ExposureTime;
-        raw_count = raw_count + 1
+	raw_count = raw_count + 1;
 	if mod(raw_count, 7) == 1
-	    groupe_count = groupe_count + 1
+	    groupe_count = groupe_count + 1;
 	end
     end
     if list_dir(i).name(end) == 'G'
@@ -62,7 +62,7 @@ for i = 1:size(list_dir, 1)
 	    %pause(1);
 	    Image_eclairage(:, :, groupe_count) = image(list_x, list_y);
 	end
-        im_count = im_count + 1;
+	im_count = im_count + 1;
     end
 end
 
@@ -71,5 +71,24 @@ Eclairage = etalonnage(Image_eclairage, masque, [diametre/2 diametre/2], diametr
 %figure,
 %quiver3(zero, zero, zero, Eclairage(1, :), Eclairage(2, :), Eclairage(3, :));
 
+[nb_eclairage, nb_exposition, row, col] = size(Images_gray);
+Eclairage_ss12 = zeros(3, nb_eclairage-1);
+Images_g_ss12 = zeros(nb_eclairage-1, nb_exposition, row, col);
+Images_m_ss12 = zeros(nb_eclairage-1, nb_exposition, row, col);
+for i = 1:nb_eclairage
+    if i < 12
+	Eclairage_ss12(:, i) = Eclairage(:, i);
+	Images_g_ss12(i, :, : ,:) = Images_gray(i, :, :, :);
+	Images_m_ss12(i, :, : ,:) = Images_mosaic(i, :, :, :);
+    elseif i > 12
+	Eclairage_ss12(:, i-1) = Eclairage(:, i);
+	Images_g_ss12(i-1, :, : ,:) = Images_gray(i, :, :, :);
+	Images_m_ss12(i-1, :, : ,:) = Images_mosaic(i, :, :, :);
+    end
+end
+
+Eclairage = Eclairage_ss12;
+Images_mosaic = Images_m_ss12;
+Images_gray = Images_g_ss12;
 
 save SOULAGES Images_mosaic Images_gray ExposureTime Eclairage ;

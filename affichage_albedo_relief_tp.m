@@ -1,14 +1,16 @@
-function affichage_albedo_relief(rho_estime,z_estime)
+function affichage_albedo_relief_tp(rho_estime,z_estime, range)
 
 % Affichage de l'albédo estimé :
-subplot(2,1,1);
-imagesc(rho_estime);
+subplot(1,2,1);
+imagesc(rho_estime, range);
+colormap gray;
+colorbar;
 title('Albedo estime','FontSize',15);
 axis image;
 axis off;
 
 % Affichage du relief estimé :
-subplot(2,1,2);
+subplot(1,2,2);
 h = surfl(fliplr(z_estime));
 title('Relief estime','FontSize',15);
 zdir = [1 0 0];
